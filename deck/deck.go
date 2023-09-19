@@ -49,7 +49,7 @@ func (d *Deck) DrawCard(c card.Card) card.Card {
 	return card.EMPTY
 }
 
-func (d *Deck) CardFaceProbability(f byte) float64 {
+func (d *Deck) CardFaceProbability(f card.CardFace) float64 {
 	var count float64 = 0
 	for _, dc := range d.Cards {
 		if dc.Face() == f {
@@ -59,7 +59,7 @@ func (d *Deck) CardFaceProbability(f byte) float64 {
 	return count / float64(d.Count())
 }
 
-func (d *Deck) CardSuitProbability(s byte) float64 {
+func (d *Deck) CardSuitProbability(s card.CardSuit) float64 {
 	var count float64 = 0
 	for _, dc := range d.Cards {
 		if dc.Suit() == s {
