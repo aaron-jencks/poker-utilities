@@ -49,6 +49,7 @@ func (d *Deck) DrawCard(c card.Card) card.Card {
 	return card.EMPTY
 }
 
+// CardFaceProbability returns the probability that f is the next card
 func (d *Deck) CardFaceProbability(f card.CardFace) float64 {
 	var count float64 = 0
 	for _, dc := range d.Cards {
@@ -59,6 +60,7 @@ func (d *Deck) CardFaceProbability(f card.CardFace) float64 {
 	return count / float64(d.Count())
 }
 
+// CardSuitProbability returns the probability that the next card has the suit s
 func (d *Deck) CardSuitProbability(s card.CardSuit) float64 {
 	var count float64 = 0
 	for _, dc := range d.Cards {
