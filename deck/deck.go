@@ -55,9 +55,9 @@ func CreateStandardDeck(jokers int) Deck {
 	d := Deck{
 		make([]card.Card, 0, 52),
 	}
-	for s := byte(0); s < card.SUITS; s++ {
+	for s := byte(0); s < byte(card.SUITS); s++ {
 		for f := card.TWO; f < card.JOKER; f++ {
-			d.Cards = append(d.Cards, card.CreateCard(f, s))
+			d.Cards = append(d.Cards, card.CreateCard(byte(f), s))
 		}
 	}
 	for j := 0; j < jokers; j++ {

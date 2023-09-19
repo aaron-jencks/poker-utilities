@@ -1,15 +1,19 @@
 package card
 
+type CardSuit byte
+
 const (
-	CLUBS byte = iota
+	CLUBS CardSuit = iota
 	DIAMONDS
 	HEARTS
 	SPADES
 	SUITS
 )
 
+type CardFace byte
+
 const (
-	TWO byte = iota + 2
+	TWO CardFace = iota + 2
 	THREE
 	FOUR
 	FIVE
@@ -34,12 +38,12 @@ const EMPTY = Card(0)
 // uu-ffff-ss
 type Card byte
 
-func (c Card) Face() byte {
-	return byte(c&0x3c) >> 2
+func (c Card) Face() CardFace {
+	return CardFace(byte(c&0x3c) >> 2)
 }
 
-func (c Card) Suit() byte {
-	return byte(c) & 0x03
+func (c Card) Suit() CardSuit {
+	return CardSuit(byte(c) & 0x03)
 }
 
 func CreateCard(face, suit byte) Card {
