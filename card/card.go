@@ -1,5 +1,6 @@
 package card
 
+// CardSuit represents an enum of card suits
 type CardSuit byte
 
 const (
@@ -10,6 +11,7 @@ const (
 	SUITS
 )
 
+// CardFace represents an enum of card faces
 type CardFace byte
 
 const (
@@ -30,22 +32,26 @@ const (
 	FACES
 )
 
-const EMPTY = Card(0)
+const EMPTY = Card(0) // represents an empty card with no face or suit
 
+// represents a single playing card
 // lowest 2 bits are the suit
 // the next 4 bits are the face
 // the highest 2 bits are unused
 // uu-ffff-ss
 type Card byte
 
+// Face returns the face of the card
 func (c Card) Face() CardFace {
 	return CardFace(byte(c&0x3c) >> 2)
 }
 
+// Suit returns the suit of the card
 func (c Card) Suit() CardSuit {
 	return CardSuit(byte(c) & 0x03)
 }
 
+// CreateCard creates a card using the given suit and face
 func CreateCard(face, suit byte) Card {
 	return Card((face << 2) + suit)
 }
