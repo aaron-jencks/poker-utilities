@@ -50,6 +50,12 @@ func CreateCard(face, suit byte) Card {
 	return Card((face << 2) + suit)
 }
 
-func CreateJoker() Card {
-	return Card(JOKER << 2)
+// Equal returns true if the face of this card equals the face of the other
+func (c Card) Equal(other Card) bool {
+	return c.Face() == other.Face() // Texas Hold'em doesn't compare suits
+}
+
+// LessThan returns true if the face of this card is less than the face of the other
+func (c Card) LessThan(other Card) bool {
+	return c.Face() < other.Face() // Texas Hold'em doesn't compare suits
 }
