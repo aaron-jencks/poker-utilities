@@ -77,7 +77,7 @@ func CreateEmptyDeck() Deck {
 }
 
 // CreateStandardDeck generates a deck with the standard 52 cards in it, plus a specified number of jokers
-func CreateStandardDeck(jokers int) Deck {
+func CreateStandardDeck() Deck {
 	d := Deck{
 		make([]card.Card, 0, 52),
 	}
@@ -85,9 +85,6 @@ func CreateStandardDeck(jokers int) Deck {
 		for f := card.TWO; f < card.JOKER; f++ {
 			d.Cards = append(d.Cards, card.CreateCard(byte(f), s))
 		}
-	}
-	for j := 0; j < jokers; j++ {
-		d.Cards = append(d.Cards, card.CreateJoker())
 	}
 	d.Shuffle()
 	return d
