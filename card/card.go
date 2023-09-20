@@ -1,5 +1,7 @@
 package card
 
+import "strings"
+
 // CardSuit represents an enum of card suits
 type CardSuit byte
 
@@ -52,8 +54,8 @@ func (c Card) Suit() CardSuit {
 }
 
 // CreateCard creates a card using the given suit and face
-func CreateCard(face, suit byte) Card {
-	return Card((face << 2) + suit)
+func CreateCard(face CardFace, suit CardSuit) Card {
+	return Card((byte(face) << 2) + byte(suit))
 }
 
 // Equal returns true if the face of this card equals the face of the other
@@ -64,4 +66,10 @@ func (c Card) Equal(other Card) bool {
 // LessThan returns true if the face of this card is less than the face of the other
 func (c Card) LessThan(other Card) bool {
 	return c.Face() < other.Face() // Texas Hold'em doesn't compare suits
+}
+
+func ParsePokerCardString(s string) Card {
+	face := CardFace(strings.IndexByte("23456789tjqka", s[0]) + 2)
+	suit := CardSuit(strings.IndexByte("cdhs", s[1]))
+	return CreateCard(face, suit)
 }
