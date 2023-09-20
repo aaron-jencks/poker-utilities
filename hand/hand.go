@@ -105,6 +105,14 @@ func (h Hand) LessThan(other Hand) bool {
 	return h.Hand < other.Hand
 }
 
+func (h Hand) String() string {
+	r := ""
+	for _, c := range h.Contents {
+		r += c.String()
+	}
+	return r
+}
+
 // is_straight returns whether the cards array contains a straight or not
 func is_straight(cards []card.Card) bool {
 	sort.Slice(cards, func(i, j int) bool { return cards[i].LessThan(cards[j]) })

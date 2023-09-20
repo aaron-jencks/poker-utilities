@@ -1,6 +1,9 @@
 package card
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // CardSuit represents an enum of card suits
 type CardSuit byte
@@ -66,6 +69,10 @@ func (c Card) Equal(other Card) bool {
 // LessThan returns true if the face of this card is less than the face of the other
 func (c Card) LessThan(other Card) bool {
 	return c.Face() < other.Face() // Texas Hold'em doesn't compare suits
+}
+
+func (c Card) String() string {
+	return fmt.Sprintf("%c%c", "23456789tjqka"[c.Face()-2], "cdhs"[c.Suit()])
 }
 
 func ParsePokerCardString(s string) Card {
