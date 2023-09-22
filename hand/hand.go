@@ -234,6 +234,20 @@ func FindHand(cards []card.Card) Hand {
 		}
 	}
 
+	if len(scounts) == 1 {
+		// flush
+		// it's lower than a 4ak and full house
+		// so it must go here
+		k0 := cards[len(cards)-1].Face()
+		k1 := cards[len(cards)-2].Face()
+		return Hand{
+			Hand:     FLUSH,
+			Kicker0:  k0,
+			Kicker1:  k1,
+			Contents: cards,
+		}
+	}
+
 	if tak {
 		k0 := card.TWO
 		k1 := card.TWO
@@ -288,7 +302,7 @@ func FindHand(cards []card.Card) Hand {
 		}
 
 		return Hand{
-			Hand:     TWO_PAIR,
+			Hand:     PAIR,
 			Kicker0:  k0,
 			Kicker1:  k1,
 			Contents: cards,

@@ -6,8 +6,73 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/aaron-jencks/poker/card"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestHandParsing(t *testing.T) {
+	tcs := []struct {
+		name  string
+		shand string
+		hand  Hand
+	}{
+		{
+			name:  "high card",
+			shand: "2d5s6sjhac",
+			hand: Hand{
+				Hand:    HIGH_CARD,
+				Kicker0: card.ACE,
+				Kicker1: card.JACK,
+				Contents: []card.Card{
+					card.ParsePokerCardString("2d"),
+					card.ParsePokerCardString("5s"),
+					card.ParsePokerCardString("6s"),
+					card.ParsePokerCardString("jh"),
+					card.ParsePokerCardString("ac"),
+				},
+			},
+		},
+		{
+			name:  "pair",
+			shand: "2c5h5sjcad",
+			hand: Hand{
+				Hand:    PAIR,
+				Kicker0: card.FIVE,
+				Kicker1: card.ACE,
+				Contents: []card.Card{
+					card.ParsePokerCardString("2c"),
+					card.ParsePokerCardString("5h"),
+					card.ParsePokerCardString("5s"),
+					card.ParsePokerCardString("jc"),
+					card.ParsePokerCardString("ad"),
+				},
+			},
+		},
+		{
+			name:  "flush",
+			shand: "2c4c7ctcqc",
+			hand: Hand{
+				Hand:    FLUSH,
+				Kicker0: card.QUEEN,
+				Kicker1: card.TEN,
+				Contents: []card.Card{
+					card.ParsePokerCardString("2c"),
+					card.ParsePokerCardString("4c"),
+					card.ParsePokerCardString("7c"),
+					card.ParsePokerCardString("tc"),
+					card.ParsePokerCardString("qc"),
+				},
+			},
+		},
+	}
+
+	for _, tc := range tcs {
+		t.Run(tc.name, func(tt *testing.T) {
+			h := ParsePokerHandString(tc.shand)
+			assert.Equal(tt, tc.hand, h, "parsed hands should be equal")
+		})
+	}
+}
 
 func TestHandRanking(t *testing.T) {
 	hands := []string{
