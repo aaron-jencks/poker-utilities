@@ -47,21 +47,26 @@ func (h Hand) Equals(other Hand) bool {
 		if h.Hand == FLUSH {
 			// we need to compare full hands for this one
 			for ci := range h.Contents {
-				if h.Contents[ci] != other.Contents[ci] {
+				if h.Contents[ci].Face() != other.Contents[ci].Face() {
 					return false
 				}
 			}
 			return true
 		}
 
-		sal := (h.Hand == STRAIGHT || h.Hand == STRAIGHT_FLUSH) && h.Contains(card.ACE) && h.Contains(card.FIVE)
-		oal := (other.Hand == STRAIGHT || other.Hand == STRAIGHT_FLUSH) && other.Contains(card.ACE) && other.Contains(card.FIVE)
+		s := h.Hand == STRAIGHT || h.Hand == STRAIGHT_FLUSH
+		sal := s && h.Contains(card.ACE) && h.Contains(card.FIVE)
+		oal := s && other.Contains(card.ACE) && other.Contains(card.FIVE)
 		if sal {
 			return sal && oal
 		}
+		if s {
+			// straights don't need to compare the rest of the kickers/cards
+			return h.Kicker0 == other.Kicker0
+		}
 		if h.Kicker0 == other.Kicker0 && h.Kicker1 == other.Kicker1 {
 			for ci := range h.Contents {
-				if h.Contents[ci] != other.Contents[ci] {
+				if h.Contents[ci].Face() != other.Contents[ci].Face() {
 					return false
 				}
 			}
@@ -77,30 +82,44 @@ func (h Hand) LessThan(other Hand) bool {
 		if h.Hand == FLUSH {
 			// we need to compare full hands for this one
 			for ci := range h.Contents {
-				if h.Contents[ci] < other.Contents[ci] {
+				if h.Contents[ci].Face() < other.Contents[ci].Face() {
 					return true
-				} else if h.Contents[ci] > other.Contents[ci] {
+				} else if h.Contents[ci].Face() > other.Contents[ci].Face() {
 					return false
 				}
 			}
 			return false
 		}
 
-		sal := (h.Hand == STRAIGHT || h.Hand == STRAIGHT_FLUSH) && h.Contains(card.ACE) && h.Contains(card.FIVE)
+		s := h.Hand == STRAIGHT || h.Hand == STRAIGHT_FLUSH
+		sal := s && h.Contains(card.ACE) && h.Contains(card.FIVE)
 
-		if !sal && h.Kicker0 == other.Kicker0 && h.Kicker1 == other.Kicker1 {
+		if s || sal {
+			// straights
+			// it's not possible to need to check the full hand
+			// either the top cards will match, or one will be higher
+			// it's not possible to have a straight where the top card matches
+			// and the rest of the cards don't
+
+			// if hand is ace low, and both hands are straights
+			// then either they're equal, or the other hand is larger
+			return h.Kicker0 < other.Kicker0
+		}
+
+		if h.Kicker0 == other.Kicker0 && h.Kicker1 == other.Kicker1 {
 			// not a straight and kickers match, compare full hand
 			for ci := range h.Contents {
-				if h.Contents[ci] < other.Contents[ci] {
+				if h.Contents[ci].Face() < other.Contents[ci].Face() {
 					return true
-				} else if h.Contents[ci] > other.Contents[ci] {
+				} else if h.Contents[ci].Face() > other.Contents[ci].Face() {
 					return false
 				}
 			}
 			return false
 		}
 
-		return !sal && (h.Kicker0 == other.Kicker0 || h.Kicker1 == other.Kicker1)
+		// one of the kickers don't match
+		return h.Kicker0 < other.Kicker0 || (h.Kicker0 == other.Kicker0 && h.Kicker1 < other.Kicker1)
 	}
 	return h.Hand < other.Hand
 }
