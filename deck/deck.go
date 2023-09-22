@@ -21,11 +21,7 @@ func (d *Deck) Shuffle() {
 	if d.Count() < 2 {
 		return
 	}
-	rand.Shuffle(d.Count(), func(i, j int) {
-		temp := d.Cards[i]
-		d.Cards[i] = d.Cards[j]
-		d.Cards[i] = temp
-	})
+	rand.Shuffle(d.Count(), func(i, j int) { d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i] })
 }
 
 // Draw returns the top n cards of the deck and removes them from the deck
