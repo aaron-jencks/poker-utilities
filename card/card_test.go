@@ -24,6 +24,28 @@ func TestParseCardString(t *testing.T) {
 	}
 }
 
+func TestParseMultiCardString(t *testing.T) {
+	tcs := []struct {
+		s  string
+		cs []Card
+	}{
+		{
+			s: "2sts4c2hac",
+			cs: []Card{
+				CreateCard(TWO, SPADES), CreateCard(TEN, SPADES),
+				CreateCard(FOUR, CLUBS), CreateCard(TWO, HEARTS),
+				CreateCard(ACE, CLUBS),
+			},
+		},
+	}
+
+	for _, tc := range tcs {
+		for ci, c := range ParseMultiPokerCardString(tc.s) {
+			assert.Equal(t, tc.cs[ci], c, "cards should equal")
+		}
+	}
+}
+
 func TestSortingCards(t *testing.T) {
 	cards := []string{"2c", "7h", "as"}
 	ocards := make([]Card, len(cards))

@@ -80,3 +80,11 @@ func ParsePokerCardString(s string) Card {
 	suit := CardSuit(strings.IndexByte("cdhs", s[1]))
 	return CreateCard(face, suit)
 }
+
+func ParseMultiPokerCardString(s string) []Card {
+	result := make([]Card, 0, len(s)>>1)
+	for i := 0; i < len(s)-1; i += 2 {
+		result = append(result, ParsePokerCardString(s[i:]))
+	}
+	return result
+}

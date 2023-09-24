@@ -30,11 +30,15 @@ func FindBestHand(hole []card.Card, table []card.Card) hand.Hand {
 func findTableWinner(handMap map[int]hand.Hand) []int {
 	// find the winners
 	var bestHands []int
-	var bh *hand.Hand
+	var bh hand.Hand
+	first := true
 	for seat, h := range handMap {
-		if bh == nil || bh.LessThan(h) {
-			bh = &h
+		if first || bh.LessThan(h) {
+			bh = h
 			bestHands = nil
+			if first {
+				first = false
+			}
 		}
 		if bh.Equals(h) {
 			bestHands = append(bestHands, seat)
